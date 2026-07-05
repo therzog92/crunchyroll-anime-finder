@@ -7,6 +7,9 @@ A desktop app to browse Crunchyroll’s full anime catalog, filter by category, 
 
 ---
 
+AI Disclosure-- this project was created with the assistance of Cursor.
+
+
 ## Screenshots
 
 ### Main window & series detail

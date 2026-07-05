@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -9,12 +10,26 @@ from pathlib import Path
 from crunchyroll_finder.config import APP_DIR
 
 BROWSER_PROFILE_DIR = APP_DIR / "browser_profile"
+PLAYWRIGHT_BROWSERS_PATH = APP_DIR / "playwright_browsers"
 LOGIN_URL = "https://www.crunchyroll.com/login"
 HOME_URL = "https://www.crunchyroll.com/"
 
 
 class BrowserLoginError(Exception):
     pass
+
+
+def _is_frozen() -> bool:
+    return getattr(sys, "frozen", False)
+
+
+def _configure_playwright_paths() -> None:
+    """Point Playwright at user data dirs; support PyInstaller one-file builds."""
+    os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH", str(PLAYWRIGHT_BROWSERS_PATH))
+    if _is_frozen() and hasattr(sys, "_MEIPASS"):
+        driver_dir = Path(sys._MEIPASS) / "playwright" / "driver"  # type: ignore[attr-defined]
+        if driver_dir.exists():
+            os.environ.setdefault("PLAYWRIGHT_DRIVER_PATH", str(driver_dir))
 
 
 def _find_etp_rt(cookies: list[dict]) -> str | None:
@@ -32,13 +47,13 @@ def _find_etp_rt(cookies: list[dict]) -> str | None:
 
 def ensure_playwright_browser() -> None:
     """Install Chromium for Playwright if missing."""
+    _configure_playwright_paths()
     try:
         from playwright.sync_api import sync_playwright
     except ImportError as e:
         raise BrowserLoginError(
-            "Playwright is not installed. Run:\n"
-            "  pip install playwright\n"
-            "  playwright install chromium"
+            "Playwright is not available in this build.\n"
+            "Re-download the latest release from GitHub."
         ) from e
 
     try:
@@ -48,6 +63,32 @@ def ensure_playwright_browser() -> None:
                 return
     except Exception:
         pass
+
+    PLAYWRIGHT_BROWSERS_PATH.mkdir(parents=True, exist_ok=True)
+    if _is_frozen():
+        try:
+            from playwright._impl._driver import compute_driver_executable, get_driver_env
+
+            driver = compute_driver_executable()
+            result = subprocess.run(
+                [str(driver), "install", "chromium"],
+                env=get_driver_env(),
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode != 0:
+                raise BrowserLoginError(
+                    "Could not download Chromium for login.\n"
+                    f"{result.stderr or result.stdout or 'Unknown error'}"
+                )
+            return
+        except BrowserLoginError:
+            raise
+        except Exception as e:
+            raise BrowserLoginError(
+                "Could not set up the login browser.\n"
+                "Check your internet connection and try Connect again."
+            ) from e
 
     subprocess.run(
         [sys.executable, "-m", "playwright", "install", "chromium"],

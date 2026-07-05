@@ -1,4 +1,4 @@
-# Build Windows release (run from repo root)
+# Build single-file Windows release (run from repo root)
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
 Set-Location $Root
@@ -6,22 +6,24 @@ Set-Location $Root
 Write-Host "Installing build dependencies..."
 python -m pip install -r requirements.txt -r requirements-build.txt -q
 
-Write-Host "Building executable..."
+$exeName = "CrunchyrollAnimeFinder.exe"
+$exePath = Join-Path $Root "dist\$exeName"
+
+Write-Host "Building single-file executable..."
 python -m PyInstaller --noconfirm --clean `
+    --onefile `
     --windowed `
     --name "CrunchyrollAnimeFinder" `
     --paths "$Root" `
     --hidden-import=PIL `
     --hidden-import=PIL.Image `
     --hidden-import=PIL.ImageTk `
-    --collect-submodules=playwright `
+    --collect-all playwright `
     run.py
 
-$distDir = Join-Path $Root "dist\CrunchyrollAnimeFinder"
-$zipPath = Join-Path $Root "dist\CrunchyrollAnimeFinder-Windows.zip"
-if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
-Compress-Archive -Path $distDir -DestinationPath $zipPath -Force
+if (-not (Test-Path $exePath)) {
+    throw "Build failed: $exePath not found"
+}
 
-Write-Host "Done:"
-Write-Host "  Folder: $distDir"
-Write-Host "  Zip:    $zipPath"
+$sizeMb = [math]::Round((Get-Item $exePath).Length / 1MB, 1)
+Write-Host "Done: $exePath ($sizeMb MB)"

@@ -88,11 +88,11 @@ User data and cache are stored in `%USERPROFILE%\.crunchyroll_finder\` (not in t
 
 ## Windows release (.exe)
 
-Download the latest **`CrunchyrollAnimeFinder-Windows.zip`** from [Releases](https://github.com/therzog92/crunchyroll-anime-finder/releases).
+Download **`CrunchyrollAnimeFinder.exe`** from [Releases](https://github.com/therzog92/crunchyroll-anime-finder/releases).
 
-1. Unzip anywhere
-2. Run `CrunchyrollAnimeFinder.exe`
-3. On first **Connect**, Chromium may be installed automatically for login (requires internet)
+1. Download the single `.exe` file
+2. Run it — no install, no zip, no extra DLL folder
+3. On first **Connect**, Chromium is downloaded once for login (~150 MB, requires internet) and saved under `%USERPROFILE%\.crunchyroll_finder\`
 
 ### Build the release yourself
 
@@ -100,7 +100,7 @@ Download the latest **`CrunchyrollAnimeFinder-Windows.zip`** from [Releases](htt
 .\scripts\build_release.ps1
 ```
 
-Output: `dist\CrunchyrollAnimeFinder\` and `dist\CrunchyrollAnimeFinder-Windows.zip`
+Output: `dist\CrunchyrollAnimeFinder.exe`
 
 ---
 

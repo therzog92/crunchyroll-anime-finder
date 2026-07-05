@@ -24,3 +24,4 @@ watchlist_sample_*.json
 
 # PyInstaller scratch
 *.manifest
+*.spec

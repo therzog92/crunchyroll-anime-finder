@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Build
+build/
+dist/
+*.spec.bak
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local dev / secrets (user data lives in %USERPROFILE%\.crunchyroll_finder)
+.env
+*.log
+watchlist_sample_*.json
+
+# PyInstaller scratch
+*.manifest

@@ -9,36 +9,23 @@ A desktop app to browse Crunchyroll’s full anime catalog, filter by category, 
 
 ## Screenshots
 
-> Drop your images into [`docs/screenshots/`](docs/screenshots/) and update the paths below.
+### Main window & series detail
 
-### Main window
+Browse the catalog, filter, and open series details with poster, audio/subtitles, and watchlist actions.
 
-Browse the catalog, filter, and open series details.
-
-<!-- Replace with your screenshot -->
-<!-- ![Main window](docs/screenshots/main-window.png) -->
-`docs/screenshots/main-window.png`
-
-### Series detail panel
-
-Poster, audio/subtitles, description, and watchlist actions.
-
-<!-- ![Detail panel](docs/screenshots/detail-panel.png) -->
-`docs/screenshots/detail-panel.png`
+![Main window and detail panel](screenshots/main-window.png)
 
 ### Watch time chart
 
 Monthly hours with per-series breakdown on click.
 
-<!-- ![Watch time](docs/screenshots/watch-time.png) -->
-`docs/screenshots/watch-time.png`
+![Watch time](screenshots/watch-time.png)
 
 ### Category filters
 
 Collapsible category sidebar with sort by count or A–Z.
 
-<!-- ![Categories](docs/screenshots/categories.png) -->
-`docs/screenshots/categories.png`
+![Categories](screenshots/categories.png)
 
 ---
 
@@ -108,7 +95,7 @@ Output: `dist\CrunchyrollAnimeFinder.exe`
 
 ```
 crunchyroll_finder/          # Python package (app, API, UI)
-docs/screenshots/            # README images
+screenshots/                 # README images
 scripts/                     # build + dev utilities
 run.py                       # dev / PyInstaller entry
 requirements.txt
